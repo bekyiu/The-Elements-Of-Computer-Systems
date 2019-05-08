@@ -43,4 +43,38 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+   
+   //judge zx, if zx == 1 select false
+   Mux16(a = x, b = false, sel = zx, out = zxOut);
+   
+   //judge nx
+   Not16(in = zxOut, out = notZxOut);
+   Mux16(a = zxOut, b = notZxOut, sel = nx, out = nxOut);
+   
+   //judge zy
+   Mux16(a = y, b = false, sel = zy, out = zyOut);
+   
+   //judge ny
+   Not16(in = zyOut, out = notZyOut);
+   Mux16(a = zyOut, b = notZyOut, sel = ny, out = nyOut);
+   
+   //judge f
+   And16(a = nxOut, b = nyOut, out = andOut);
+   Add16(a = nxOut, b = nyOut, out = addOut);
+   Mux16(a = andOut, b = addOut, sel = f, out = fOut);
+   
+   //judge no
+   Not16(in = fOut, out = notFOut);
+   Mux16(a = fOut, b = notFOut, sel = no, out = final);
+   
+   //out16
+   Mux16(a = false, b = final, sel = true, out = out);
+   
+   //zr
+   Or16Way(in = final, out = zrOut);
+   Not(in=zrOut, out=zr);
+   
+   //ng
+   //And(a = final[15], b = true, out = ng); //cant write this in this file
+   Ng(in = final, out = ng);
 }
