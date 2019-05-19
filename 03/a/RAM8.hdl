@@ -16,4 +16,22 @@ CHIP RAM8 {
 
     PARTS:
     // Put your code here:
+	// choose one of the 8 registers to read or write
+	DMux8Way(in = load, sel = address, a = addr0, b = addr1, c = addr2, 
+	d = addr3, e = addr4, f = addr5, g = addr6, h = addr7);
+	
+	Register(in = in, load = addr0, out = out0);
+	Register(in = in, load = addr1, out = out1);
+	Register(in = in, load = addr2, out = out2);
+	Register(in = in, load = addr3, out = out3);
+	
+	Register(in = in, load = addr4, out = out4);
+	Register(in = in, load = addr5, out = out5);
+	Register(in = in, load = addr6, out = out6);
+	Register(in = in, load = addr7, out = out7);
+	
+	// if write, output what to write. if read, output the read result.
+	Mux8Way16(a = out0, b = out1, c = out2, d = out3, e = out4, f = out5, 
+	g = out6, h = out7, sel = address, out = out);
+	
 }
