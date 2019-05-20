@@ -16,4 +16,22 @@ CHIP RAM64 {
 
     PARTS:
     // Put your code here:
+	// Divide the 6 bits address into two parts, xxxyyy
+	// the xxx is used to select the RAM8 chip
+	// the yyy is used to select registers by RAM8 chip
+	
+	DMux8Way(in=load, sel=address[3..5], a=loadA, b=loadB, c=loadC, d=loadD, e=loadE, f=loadF, g=loadG, h=loadH);
+	
+	RAM8(in = in, load = loadA, address = address[0..2], out = out0);
+	RAM8(in = in, load = loadB, address = address[0..2], out = out1);
+	RAM8(in = in, load = loadC, address = address[0..2], out = out2);
+	RAM8(in = in, load = loadD, address = address[0..2], out = out3);
+	
+	RAM8(in = in, load = loadE, address = address[0..2], out = out4);
+	RAM8(in = in, load = loadF, address = address[0..2], out = out5);
+	RAM8(in = in, load = loadG, address = address[0..2], out = out6);
+	RAM8(in = in, load = loadH, address = address[0..2], out = out7);
+	
+	Mux8Way16(a = out0, b = out1, c = out2, d = out3, e = out4, f = out5, 
+	g = out6, h = out7, sel = address[3..5], out = out);
 }
