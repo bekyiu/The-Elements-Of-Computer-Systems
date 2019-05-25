@@ -28,4 +28,25 @@ CHIP Memory {
 
     PARTS:
     // Put your code here:
+	
+	// the memory address
+	// RAM	16383	011 1111 1111 1111
+	//---------------------------------
+	// SCR	16384	100 0000 0000 0000
+	// ...
+	//		24575	101 1111 1111 1111
+	//---------------------------------
+	// KBD	24576	110 0000 0000 0000
+	
+	// if address[14] == 0, the address addressed in RAM
+	// else addressed in memory-map
+	Mux(a=load, b=false, sel=address[14], out=rload);
+	Mux(a=false, b=load, sel=address[14], out=sload);
+
+	RAM16K(in=in, load=rload, address=address[0..13], out=rout);
+	Screen(in=in, load=sload, address=address[0..12], out=sout);
+	Keyboard(out=kout);
+	
+	Mux16(a=sout, b=kout, sel=address[13], out=hout);
+	Mux16(a=rout, b=hout, sel=address[14], out=out);
 }
