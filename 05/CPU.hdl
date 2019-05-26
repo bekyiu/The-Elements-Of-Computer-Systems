@@ -40,4 +40,43 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+	
+	// a-instruction(start with zero) can be stored in A register
+	Mux16(a = instruction, b = outALU, sel = instruction[15], out = outMux1);
+	// if stored in A
+	// if a-ins || (c-ins && ins[5] == 1) load = 1   ->   if a-ins || ins[5] == 1 load = 1
+	Not(in = instruction[15], out = outNot);
+	Or(a = outNot, b = instruction[5], out = outOr);
+	ARegister(in = outMux1, load = outOr, out = outA, out[0..14] = addressM);
+	
+	//the ALU output if stored in D
+	And(a = instruction[15], b = instruction[4], out = loadD);
+	DRegister(in = outALU, load = loadD, out = outD);
+	
+	//A or M
+	Mux16(a = outA, b = inM, sel = instruction[12], out = outMux2);
+	
+	//ALU
+	ALU(x = outD, y = outMux2, zx = instruction[11], nx = instruction[10], zy = instruction[9], 
+	ny = instruction[8], f = instruction[7], no = instruction[6],
+	out = outALU, out = outM, zr = zr, ng = ng);
+	
+	// if sotred in RAM
+	And(a = instruction[3], b = instruction[15], out = writeM);
+	
+	// PC
+	Not(in = zr, out = notzr);
+	Not(in = ng, out = notng);
+	// ps represented the ALU output is positive
+	And(a = notzr, b = notng, out = ps);
+	
+	//if jump
+	And(a = ng, b = instruction[2], out = and1);
+	And(a = zr, b = instruction[1], out = and2);
+	And(a = ps, b = instruction[0], out = and3);
+	Or(a = and1, b = and2, out = or1);
+	Or(a = or1, b = and3, out = or2);
+	//only c-ins can jump
+	And(a = or2, b = instruction[15], out = outAnd3); 
+	PC(in = outA, load = outAnd3, reset = reset, inc = true, out[0..14] = pc);
 }
