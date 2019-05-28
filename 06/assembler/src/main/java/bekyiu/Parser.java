@@ -30,12 +30,12 @@ public class Parser
         String type = commandType(command);
         if (type.equals(A_COMMAND))
         {
-            return type.substring(1);
+            return command.substring(1);
         }
         if (type.equals(L_COMMAND))
         {
-            return type.substring(type.indexOf("(") + 1,
-                    type.lastIndexOf(")"));
+            return command.substring(command.indexOf("(") + 1,
+                    command.lastIndexOf(")"));
         }
         return null;
     }
