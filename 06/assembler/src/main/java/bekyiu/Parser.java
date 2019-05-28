@@ -1,5 +1,6 @@
 package bekyiu;
 
+
 /**
  * 对读取的一行汇编语言命令并对其进行解析
  * 去掉所有的空格和注释 (为了方便先在外面做了)
@@ -104,5 +105,21 @@ public class Parser
     public static String escapeSpace(String str)
     {
         return str.replaceAll("\\s*", "");
+    }
+
+    // 注释可能会跟在语句后面
+    public static String escapeComment(String str)
+    {
+        if(str.contains("//"))
+        {
+            return str.substring(0, str.indexOf("/"));
+        }
+        return str;
+    }
+
+    public static String filter(String str)
+    {
+        str = escapeSpace(str);
+        return escapeComment(str);
     }
 }
