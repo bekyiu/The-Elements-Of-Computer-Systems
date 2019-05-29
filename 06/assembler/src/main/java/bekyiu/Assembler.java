@@ -17,8 +17,8 @@ public class Assembler
     {
         Assembler a = new Assembler();
 
-        a.buildSymbolTable("Max.asm");
-        a.buildHack("Max.asm");
+        a.buildSymbolTable("Pong.asm");
+        a.buildHack("Pong.asm");
     }
 
     // 输出.hack文件
@@ -78,7 +78,7 @@ public class Assembler
         }
         else
         {
-//            target = l_cmdBinaryCode(c);
+            // 伪指令不产生机器码
         }
         return target;
     }
@@ -92,7 +92,6 @@ public class Assembler
         if (isStringNumber(symbol))
         {
             binary = Integer.toBinaryString(Integer.valueOf(symbol));
-
         }
         else
         {

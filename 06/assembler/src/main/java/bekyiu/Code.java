@@ -175,6 +175,10 @@ public class Code
         {
             return "010";
         }
+        if(mnemonic.equals("JGE"))
+        {
+            return "011";
+        }
         if(mnemonic.equals("JLT"))
         {
             return "100";
