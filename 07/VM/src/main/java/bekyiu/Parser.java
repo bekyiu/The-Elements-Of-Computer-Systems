@@ -1,7 +1,7 @@
 package bekyiu;
 
 // 解析VM指令
-public class Parse
+public class Parser
 {
     public static final String C_ARITHMETIC = "C_ARITHMETIC";
     public static final String C_PUSH = "C_PUSH";
@@ -12,6 +12,16 @@ public class Parse
     public static final String C_FUNCTION = "C_FUNCTION";
     public static final String C_RETURN = "C_RETURN";
     public static final String C_CALL = "C_CALL";
+
+    public static final String ARGUMENT = "argument";
+    public static final String LOCAL = "local";
+    public static final String STATIC = "static";
+    public static final String CONSTANT = "constant";
+    public static final String THIS = "this";
+    public static final String THAT = "that";
+    public static final String POINTER = "pointer";
+    public static final String TEMP = "temp";
+
 
     // 返回当前命令的类型
     public String commandType(String c)
@@ -55,11 +65,11 @@ public class Parse
     public String arg1(String c)
     {
         String type = commandType(c);
-        if (type.equals(Parse.C_RETURN))
+        if (type.equals(Parser.C_RETURN))
         {
             return null;
         }
-        if (type.equals(Parse.C_ARITHMETIC))
+        if (type.equals(Parser.C_ARITHMETIC))
         {
             return c;
         }
@@ -70,8 +80,8 @@ public class Parse
     public Integer arg2(String c)
     {
         String type = commandType(c);
-        if (type.equals(Parse.C_PUSH) || type.equals(Parse.C_POP)
-                || type.equals(Parse.C_FUNCTION) || type.equals(Parse.C_CALL))
+        if (type.equals(Parser.C_PUSH) || type.equals(Parser.C_POP)
+                || type.equals(Parser.C_FUNCTION) || type.equals(Parser.C_CALL))
         {
             return Integer.valueOf(c.split(" ")[2]);
         }
