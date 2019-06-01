@@ -13,7 +13,7 @@ public class CodeWriter
     private static Integer inc = 0;
     private Parser parser = new Parser();
     @Setter
-    private String fileName;    //static 会用到
+    private String fileName;    //翻译文件的名称 static 会用到
 
     public String writeArithmetic(String c)
     {

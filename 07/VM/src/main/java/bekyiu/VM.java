@@ -10,40 +10,30 @@ public class VM
     public static void main(String[] args)
     {
 
-        new VM().fuck("MemoryAccess/StaticTest/", "StaticTest.vm");
+        new VM().build("MemoryAccess/StaticTest/", "StaticTest.vm");
     }
 
-    public void fuck(String path, String fileName)
+    public void build(String path, String fileName)
     {
         File vmFile = new File(path, fileName);
         File asmFile = new File(path, fileName.split("\\.")[0] + ".asm");
         codeWriter.setFileName(fileName.split("\\.")[0]);
+
         BufferedReader br = null;
         BufferedWriter bw = null;
+
         try
         {
             br = new BufferedReader(new FileReader(vmFile));
             bw = new BufferedWriter(new FileWriter(asmFile));
             String line = "";
-            while((line = br.readLine()) != null)
+            while ((line = br.readLine()) != null)
             {
-                if(line.startsWith("//") || line.equals(""))
+                String asm = getAsmCode(line);
+                if (asm != null)
                 {
-                    continue;
+                    bw.write(asm);
                 }
-                String c = Parser.filter(line);
-                System.out.println(c);
-                String type = parser.commandType(c);
-                String asm = null;
-                if(type.equals(Parser.C_ARITHMETIC))
-                {
-                    asm = codeWriter.writeArithmetic(c);
-                }
-                else if(type.equals(Parser.C_PUSH) || type.equals(Parser.C_POP))
-                {
-                    asm = codeWriter.writePushPop(c);
-                }
-                bw.write(asm);
 //                bw.newLine();
             }
         }
@@ -55,6 +45,27 @@ public class VM
         {
             close(br, bw);
         }
+    }
+
+    private String getAsmCode(String line)
+    {
+        if (line.startsWith("//") || line.equals(""))
+        {
+            return null;
+        }
+        String c = Parser.filter(line);
+        System.out.println(c);
+        String type = parser.commandType(c);
+        String asm = null;
+        if (type.equals(Parser.C_ARITHMETIC))
+        {
+            asm = codeWriter.writeArithmetic(c);
+        }
+        else if (type.equals(Parser.C_PUSH) || type.equals(Parser.C_POP))
+        {
+            asm = codeWriter.writePushPop(c);
+        }
+        return asm;
     }
 
     private void close(BufferedReader br, BufferedWriter bw)
