@@ -1,5 +1,10 @@
 package bekyiu;
 
+import lombok.Setter;
+
+import java.util.HashMap;
+import java.util.Map;
+
 // 将VM指令翻译成Hack汇编
 public class CodeWriter
 {
@@ -7,6 +12,8 @@ public class CodeWriter
     // 这样如果翻译成汇编之后, 标号会重复, 所以要加以区分
     private static Integer inc = 0;
     private Parser parser = new Parser();
+    @Setter
+    private String fileName;    //static 会用到
 
     public String writeArithmetic(String c)
     {
@@ -53,6 +60,14 @@ public class CodeWriter
     // push or pop
     private String pushPopTemplate(String type, String arg1, Integer arg2)
     {
+        Map<String, String> map = new HashMap<>();
+        map.put("local", "LCL");
+        map.put("argument", "ARG");
+        map.put("this", "THIS");
+        map.put("that", "THAT");
+        map.put("0", "THIS");
+        map.put("1", "THAT");
+
         if(type.equals(Parser.C_PUSH))
         {
             if(arg1.equals("constant"))
@@ -65,10 +80,109 @@ public class CodeWriter
                         "@SP\n" +
                         "M = M + 1\n";
             }
+            if(arg1.equals("local") || arg1.equals("argument") || arg1.equals("this")
+                    || arg1.equals("that"))
+            {
+                return "@" + arg2 + "\n" +
+                        "D = A\n" +
+                        "@" + map.get(arg1) + "\n" +
+                        "A = D + M\n" +
+                        "D = M\n" +
+                        "@SP\n" +
+                        "A = M\n" +
+                        "M = D\n" +
+                        "@SP\n" +
+                        "M = M + 1\n";
+            }
+            if(arg1.equals("pointer"))
+            {
+                return "@" + map.get(String.valueOf(arg2)) + "\n" +
+                        "D = M\n" +
+                        "@SP\n" +
+                        "A = M\n" +
+                        "M = D\n" +
+                        "@SP\n" +
+                        "M = M + 1\n";
+            }
+            if(arg1.equals("temp"))
+            {
+                return "@" + arg2 + "\n" +
+                        "D = A\n" +
+                        "@5\n" +
+                        "A = D + A\n" +
+                        "D = M\n" +
+                        "@SP\n" +
+                        "A = M\n" +
+                        "M = D\n" +
+                        "@SP\n" +
+                        "M = M + 1\n";
+            }
+            if(arg1.equals("static"))
+            {
+                String label = fileName + "." + arg2;
+                return "@" + label + "\n" +
+                        "D = M\n" +
+                        "@SP\n" +
+                        "A = M\n" +
+                        "M = D\n" +
+                        "@SP\n" +
+                        "M = M + 1\n";
+            }
         }
         else
         {
-
+            if(arg1.equals("local") || arg1.equals("argument") || arg1.equals("this")
+                    || arg1.equals("that"))
+            {
+                return "@" + arg2 + "\n" +
+                        "D = A\n" +
+                        "@" + map.get(arg1) + "\n" +
+                        "D = D + M\n" +
+                        "@addr\n" +
+                        "M = D\n" +
+                        "@SP\n" +
+                        "M = M - 1\n" +
+                        "A = M\n" +
+                        "D = M\n" +
+                        "@addr\n" +
+                        "A = M\n" +
+                        "M = D\n";
+            }
+            if(arg1.equals("pointer"))
+            {
+                return "@SP\n" +
+                        "M = M - 1\n" +
+                        "A = M\n" +
+                        "D = M\n" +
+                        "@" + map.get(String.valueOf(arg2)) + "\n" +
+                        "M = D\n";
+            }
+            if(arg1.equals("temp"))
+            {
+                return "@" + arg2 + "\n" +
+                        "D = A\n" +
+                        "@5\n" +
+                        "D = D + A\n" +
+                        "@addr\n" +
+                        "M = D\n" +
+                        "@SP\n" +
+                        "M = M - 1\n" +
+                        "A = M\n" +
+                        "D = M\n" +
+                        "@addr\n" +
+                        "A = M\n" +
+                        "M = D\n";
+            }
+            if(arg1.equals("static"))
+            {
+                String label = fileName + "." + arg2;
+                return "@SP\n" +
+                        "M = M - 1\n" +
+                        "A = M\n" +
+                        "D = M\n" +
+                        "@" + label + "\n" +
+                        "M = D\n";
+            }
         }
         return null;
     }

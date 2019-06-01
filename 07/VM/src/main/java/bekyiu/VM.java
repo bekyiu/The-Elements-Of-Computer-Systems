@@ -9,13 +9,15 @@ public class VM
 
     public static void main(String[] args)
     {
-        new VM().fuck();
+
+        new VM().fuck("MemoryAccess/StaticTest/", "StaticTest.vm");
     }
 
-    public void fuck()
+    public void fuck(String path, String fileName)
     {
-        File vmFile = new File("StackArithmetic/SimpleAdd/", "SimpleAdd.vm");
-        File asmFile = new File("StackArithmetic/SimpleAdd/", "SimpleAdd.asm");
+        File vmFile = new File(path, fileName);
+        File asmFile = new File(path, fileName.split("\\.")[0] + ".asm");
+        codeWriter.setFileName(fileName.split("\\.")[0]);
         BufferedReader br = null;
         BufferedWriter bw = null;
         try
@@ -37,7 +39,7 @@ public class VM
                 {
                     asm = codeWriter.writeArithmetic(c);
                 }
-                else
+                else if(type.equals(Parser.C_PUSH) || type.equals(Parser.C_POP))
                 {
                     asm = codeWriter.writePushPop(c);
                 }
