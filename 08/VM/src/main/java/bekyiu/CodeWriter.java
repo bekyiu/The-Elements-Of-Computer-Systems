@@ -256,6 +256,70 @@ public class CodeWriter
         return null;
     }
 
+    public String writeCall(String c)
+    {
+        String funcName = parser.arg1(c);
+        Integer nums = parser.arg2(c);
+
+        String returnSymbol = "RETURN-ADDRESS" + inc++;
+        String pushTemplate = "@SP\nA = M\nM = D\n@SP\nM = M + 1\n";
+        String pushAddr =  "@" + returnSymbol + "\nD = A\n" + pushTemplate;
+        String pushLCL = "@LCL\nD = M\n" + pushTemplate;
+        String pushARG = "@ARG\nD = M\n" + pushTemplate;
+        String pushTHIS = "@THIS\nD = M\n" + pushTemplate;
+        String pushTHAT = "@THAT\nD = M\n" + pushTemplate;
+        // ARG = SP - n - 5
+        String exp1 = "@SP\n" +
+                "D = M\n" +
+                "@" + nums + "\n" +
+                "D = D - A\n" +
+                "@5\n" +
+                "D = D - A\n" +
+                "@ARG\n" +
+                "M = D\n";
+        // LCL = SP
+        String exp2 = "@SP\n" +
+                "D = M\n" +
+                "@LCL\n" +
+                "M = D\n";
+        // goto f
+        String exp3 = "@" + funcName + "\n0; JMP\n";
+        String returnLabel = "(" + returnSymbol + ")\n";
+        return pushAddr + pushLCL + pushARG + pushTHIS + pushTHAT +
+                exp1 + exp2 + exp3 + returnLabel;
+
+    }
+
+    public String writeFunction(String c)
+    {
+        String funcName = parser.arg1(c);
+        Integer nums = parser.arg2(c);
+        String s = "(" + funcName + ")\n" +
+                "@" + nums + "\n" +
+                "D = A\n" +
+                "@times\n" +
+                "M = D\n" +
+                "(LOOP" + inc + ")\n" +
+                "@times\n" +
+                "D = M\n" +
+                "@END" + inc + "\n" +
+                "D; JEQ\n" +
+                "@0\n" +
+                "D = A\n" +
+                "@SP\n" +
+                "A = M\n" +
+                "M = D\n" +
+                "@SP\n" +
+                "M = M + 1\n" +
+                "@times\n" +
+                "M = M - 1\n" +
+                "@LOOP" + inc + "\n" +
+                "0; JMP\n" +
+                "(END" + inc + ")\n";
+        inc++;
+        return s;
+    }
+
     public String writeLabel(String c)
     {
         String label = parser.arg1(c);
@@ -278,7 +342,5 @@ public class CodeWriter
                 a_ins +
                 "D; JNE\n";
     }
-
-    //
 
 }
