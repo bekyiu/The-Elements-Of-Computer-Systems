@@ -10,8 +10,8 @@ public class VM
     public static void main(String[] args)
     {
 
-        //ProgramFlow/FibonacciSeries/FibonacciSeries.vm
-        new VM().build("ProgramFlow/FibonacciSeries/", "FibonacciSeries.vm");
+        //FunctionCalls/SimpleFunction/SimpleFunction.vm
+        new VM().build("FunctionCalls/SimpleFunction/", "SimpleFunction.vm");
     }
 
     public void build(String path, String fileName)
@@ -76,6 +76,18 @@ public class VM
         else if(type.equals(Parser.C_IF))
         {
             asm = codeWriter.writeIf(c);
+        }
+        else if(type.equals(Parser.C_CALL))
+        {
+            asm = codeWriter.writeCall(c);
+        }
+        else if(type.equals(Parser.C_FUNCTION))
+        {
+            asm = codeWriter.writeFunction(c);
+        }
+        else if(type.equals(Parser.C_RETURN))
+        {
+            asm = codeWriter.writeReturn();
         }
         return asm;
     }

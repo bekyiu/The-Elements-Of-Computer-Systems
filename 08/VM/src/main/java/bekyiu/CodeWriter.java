@@ -320,6 +320,65 @@ public class CodeWriter
         return s;
     }
 
+    public String writeReturn()
+    {
+        return "@LCL\n" +
+                "D = M\n" +
+                "@frame\n" +
+                "M = D\n" +
+                "@5\n" +
+                "D = D - A\n" +
+                "A = D\n" +
+                "D = M\n" +
+                "@ret\n" +
+                "M = D\n" +
+                "@SP\n" +
+                "M = M - 1\n" +
+                "A = M\n" +
+                "D = M\n" +
+                "@ARG\n" +
+                "A = M\n" +
+                "M = D\n" +
+                "@ARG\n" +
+                "D = M + 1\n" +
+                "@SP\n" +
+                "M = D\n" +
+                "@frame\n" +
+                "D = M\n" +
+                "D = D - 1\n" +
+                "A = D\n" +
+                "D = M\n" +
+                "@THAT\n" +
+                "M = D\n" +
+                "@frame\n" +
+                "D = M\n" +
+                "@2\n" +
+                "D = D - A\n" +
+                "A = D\n" +
+                "D = M\n" +
+                "@THIS\n" +
+                "M = D\n" +
+                "@frame\n" +
+                "D = M\n" +
+                "@3\n" +
+                "D = D - A\n" +
+                "A = D\n" +
+                "D = M\n" +
+                "@ARG\n" +
+                "M = D\n" +
+                "@frame\n" +
+                "D = M\n" +
+                "@4\n" +
+                "D = D - A\n" +
+                "A = D\n" +
+                "D = M\n" +
+                "@LCL\n" +
+                "M = D\n" +
+                "@ret\n" +
+                "A = M\n" +
+                "0; JMP\n";
+    }
+
     public String writeLabel(String c)
     {
         String label = parser.arg1(c);
