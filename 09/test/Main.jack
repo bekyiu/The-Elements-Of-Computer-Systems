@@ -1,0 +1,37 @@
+class Main
+{
+	function void main()
+	{
+		/* 
+		do Screen.setColor(true);
+		do Screen.drawCircle(100, 100, 100);
+		do Screen.setColor(false);
+		do Screen.drawCircle(100, 100, 99);
+		*/
+		var int x, y;
+		var int size;
+		let x = 200;
+		let y = 200;
+		let size = 30;
+		while (x > 0 & y > 0)
+		{
+			/*
+			do Screen.setColor(true);
+			do Screen.drawRectangle(x, y, x + size, y + size);
+			do Screen.setColor(false);
+			do Screen.drawRectangle(x, y, x + size, y + size);
+			// do Screen.clearScreen();
+			let y = y - 1;
+			do Screen.setColor(true);
+			do Screen.drawRectangle(x, y, x + size, y + size);
+			do Sys.wait(1);
+			*/
+			 do Screen.setColor(false);
+			 do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
+			 let y = y - 2;
+			 do Screen.setColor(true);
+			 do Screen.drawRectangle(x, y, x + size, y + 1);
+		}
+		return;
+	}
+}
