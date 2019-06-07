@@ -251,17 +251,34 @@ public class CodeWriter
                 "M = M + 1\n";
     }
 
+    // 写在整个文件的开头
     public String writeInit()
     {
-        return null;
+        // 这个sp的值, 测试文件里写的是261不是256, 坑
+        return "@261\n" +
+                "D = A\n" +
+                "@SP\n" +
+                "M = D\n" +
+                "@Sys.init\n" +
+                "0; JMP\n";
     }
 
+    /*
+    注意: 函数的名称, label 在翻译的过程中都是有规范的
+    在Xxx.vm文件中的函数f, 那么他的入口标号应该翻译为Xxx.f
+    在Xxx.vm文件中的函数f中的所有label Z, 都应该翻译为Xxx.f$Z
+    在Xxx.vm文件中的函数f, 他的返回地址应该为Xxx.f$ret.i
+
+    不过我假定给出的vm code的函数名称都为Xxx.f
+    函数中的label都为Xxx.f$Z
+    vm code是compiler的输出, 所以会在compiler中实现
+     */
     public String writeCall(String c)
     {
         String funcName = parser.arg1(c);
         Integer nums = parser.arg2(c);
 
-        String returnSymbol = "RETURN-ADDRESS" + inc++;
+        String returnSymbol = funcName + "$ret." + inc++;
         String pushTemplate = "@SP\nA = M\nM = D\n@SP\nM = M + 1\n";
         String pushAddr =  "@" + returnSymbol + "\nD = A\n" + pushTemplate;
         String pushLCL = "@LCL\nD = M\n" + pushTemplate;
@@ -290,6 +307,7 @@ public class CodeWriter
 
     }
 
+    //f在XX.vm中应被翻译为XX.f 可以交给compiler来做, 这里不作处理
     public String writeFunction(String c)
     {
         String funcName = parser.arg1(c);

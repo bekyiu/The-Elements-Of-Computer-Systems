@@ -14,80 +14,96 @@
     <session id="-1300522416">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.19" value="1" />
           <entry key="project.open.time.22" value="2" />
           <entry key="project.open.time.24" value="1" />
+          <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.27" value="1" />
+          <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.45" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="7034" />
+          <entry key="asm" value="2" />
+          <entry key="java" value="7683" />
+          <entry key="tst" value="12" />
+          <entry key="vm" value="18" />
           <entry key="xml" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="7034" />
+          <entry key="Assembly File" value="2" />
+          <entry key="JAVA" value="7683" />
+          <entry key="PLAIN_TEXT" value="12" />
+          <entry key="VTL" value="18" />
           <entry key="XML" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="asm" value="16" />
+          <entry key="asm" value="23" />
           <entry key="html" value="1" />
           <entry key="java" value="6" />
-          <entry key="tst" value="1" />
-          <entry key="vm" value="14" />
+          <entry key="out" value="1" />
+          <entry key="tst" value="6" />
+          <entry key="vm" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Assembly File" value="16" />
+          <entry key="Assembly File" value="23" />
           <entry key="HTML" value="1" />
           <entry key="JAVA" value="6" />
-          <entry key="PLAIN_TEXT" value="1" />
-          <entry key="VTL" value="14" />
+          <entry key="PLAIN_TEXT" value="7" />
+          <entry key="VTL" value="20" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bekyiu/VM.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+            <state>
+              <caret column="11" selection-start-column="11" selection-end-column="11" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/$out.asm">
+        <entry file="file://$PROJECT_DIR$/FunctionCalls/StaticsTest/StaticsTest.tst">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2660">
-              <caret line="1" column="2" lean-forward="true" selection-start-line="1" selection-start-column="2" selection-end-line="1" selection-end-column="2" />
+            <state relative-caret-position="190">
+              <caret line="10" column="15" lean-forward="true" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/FunctionCalls/StaticsTest/Sys.vm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/Main.vm">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-57" />
-          </provider>
+        <entry file="file://$PROJECT_DIR$/FunctionCalls/StaticsTest/StaticsTestVME.tst">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bekyiu/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="95" column="18" selection-start-line="95" selection-start-column="18" selection-end-line="95" selection-end-column="18" />
+            <state relative-caret-position="-1425">
+              <caret column="15" lean-forward="true" selection-start-column="15" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -95,8 +111,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bekyiu/CodeWriter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="791">
-              <caret line="322" column="30" selection-start-line="322" selection-start-column="30" selection-end-line="322" selection-end-column="30" />
+            <state relative-caret-position="237">
+              <caret line="256" column="20" selection-start-line="256" selection-start-column="20" selection-end-line="256" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -118,6 +134,8 @@
       <find>Parse</find>
       <find>template</find>
       <find>addr</find>
+      <find>$</find>
+      <find>256</find>
     </findStrings>
     <replaceStrings>
       <replace>Parser</replace>
@@ -132,8 +150,16 @@
         <option value="$PROJECT_DIR$/src/main/java/bekyiu/Parse.java" />
         <option value="$PROJECT_DIR$/src/main/java/bekyiu/App.java" />
         <option value="$PROJECT_DIR$/src/main/java/bekyiu/Parser.java" />
+        <option value="$PROJECT_DIR$/FunctionCalls/FibonacciElement/out.asm" />
+        <option value="$PROJECT_DIR$/ProgramFlow/BasicLoop/BasicLoop.tst" />
+        <option value="$PROJECT_DIR$/ProgramFlow/BasicLoop/out.asm" />
+        <option value="$PROJECT_DIR$/ProgramFlow/FibonacciSeries/FibonacciSeries.tst" />
+        <option value="$PROJECT_DIR$/FunctionCalls/SimpleFunction/SimpleFunction.tst" />
         <option value="$PROJECT_DIR$/src/main/java/bekyiu/CodeWriter.java" />
+        <option value="$PROJECT_DIR$/FunctionCalls/FibonacciElement/Sys.vm" />
         <option value="$PROJECT_DIR$/src/main/java/bekyiu/VM.java" />
+        <option value="$PROJECT_DIR$/FunctionCalls/StaticsTest/StaticsTest.tst" />
+        <option value="$PROJECT_DIR$/FunctionCalls/StaticsTest/Sys.vm" />
       </list>
     </option>
   </component>
@@ -158,10 +184,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="517" />
-    <option name="y" value="55" />
-    <option name="width" value="994" />
-    <option name="height" value="669" />
+    <option name="x" value="-1688" />
+    <option name="y" value="64" />
+    <option name="width" value="1696" />
+    <option name="height" value="1066" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -197,6 +223,11 @@
               <item name="VM" type="462c0819:PsiDirectoryNode" />
               <item name="FunctionCalls" type="462c0819:PsiDirectoryNode" />
               <item name="StaticsTest" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="VM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="VM" type="462c0819:PsiDirectoryNode" />
+              <item name="ProgramFlow" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="VM" type="b2602c69:ProjectViewProjectNode" />
@@ -290,17 +321,17 @@
     </recent_temporary>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
+    <frame x="-1688" y="64" width="1696" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2375189" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19437653" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="JRebel" order="2" side_tool="true" />
       <window_info id="Designer" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2795699" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.18327974" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39938557" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -395,13 +426,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ProgramFlow/BasicLoop/BasicLoop.asm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-70">
-          <caret line="96" column="9" lean-forward="true" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ProgramFlow/FibonacciSeries/FibonacciSeries.asm">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3186">
@@ -409,10 +433,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ProgramFlow/FibonacciSeries/FibonacciSeries.vm">
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/NestedCall/NestedCall.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="8" column="35" lean-forward="true" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
+        <state relative-caret-position="-513" />
+      </provider>
+    </entry>
+    <entry file="jar://D:/java/src.zip!/java/io/FilenameFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="43" column="7" lean-forward="true" selection-start-line="43" selection-start-column="7" selection-end-line="43" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/SimpleFunction/$out.asm" />
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/Sys.asm" />
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/Main.asm" />
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/$out.asm" />
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/Main.vm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ProgramFlow/BasicLoop/BasicLoop.asm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="96" column="9" lean-forward="true" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -423,46 +470,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FunctionCalls/NestedCall/NestedCall.html">
+    <entry file="file://$PROJECT_DIR$/ProgramFlow/BasicLoop/BasicLoop.tst">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-513" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/FunctionCalls/SimpleFunction/SimpleFunction.tst">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
+        <state relative-caret-position="95">
+          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/Sys.vm">
+    <entry file="file://$PROJECT_DIR$/ProgramFlow/BasicLoop/out.asm">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" selection-start-line="11" selection-end-line="11" selection-end-column="15" />
+        <state relative-caret-position="380">
+          <caret line="20" column="12" lean-forward="true" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FunctionCalls/SimpleFunction/SimpleFunction.vm">
+    <entry file="file://$PROJECT_DIR$/ProgramFlow/FibonacciSeries/FibonacciSeries.vm">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="3" lean-forward="true" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+        <state relative-caret-position="152">
+          <caret line="8" column="35" lean-forward="true" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bekyiu/CodeWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="791">
-          <caret line="322" column="30" selection-start-line="322" selection-start-column="30" selection-end-line="322" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/ProgramFlow/FibonacciSeries/FibonacciSeries.out">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="jar://D:/java/src.zip!/java/io/FilenameFilter.java">
+    <entry file="file://$PROJECT_DIR$/ProgramFlow/FibonacciSeries/out.asm">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ProgramFlow/FibonacciSeries/FibonacciSeries.tst">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="43" column="7" lean-forward="true" selection-start-line="43" selection-start-column="7" selection-end-line="43" selection-end-column="7" />
+        <state relative-caret-position="95">
+          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -473,44 +511,79 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FunctionCalls/SimpleFunction/$out.asm">
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/SimpleFunction/out.asm">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1824" />
+        <state relative-caret-position="-2057">
+          <caret line="17" column="6" lean-forward="true" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/Sys.asm">
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/SimpleFunction/SimpleFunction.tst">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1387">
-          <caret line="79" column="7" lean-forward="true" selection-start-line="79" selection-start-column="7" selection-end-line="79" selection-end-column="7" />
+        <state relative-caret-position="95">
+          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/SimpleFunction/SimpleFunction.vm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="3" lean-forward="true" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/Sys.vm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/out.asm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="722">
+          <caret line="38" column="2" selection-start-line="38" selection-start-column="2" selection-end-line="38" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bekyiu/CodeWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="256" column="20" selection-start-line="256" selection-start-column="20" selection-end-line="256" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bekyiu/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="95" column="18" selection-start-line="95" selection-start-column="18" selection-end-line="95" selection-end-column="18" />
+        <state relative-caret-position="-1425">
+          <caret column="15" lean-forward="true" selection-start-column="15" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/Main.asm">
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/StaticsTest/StaticsTestVME.tst">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/Main.vm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-57" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/FunctionCalls/FibonacciElement/$out.asm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2660">
-          <caret line="1" column="2" lean-forward="true" selection-start-line="1" selection-start-column="2" selection-end-line="1" selection-end-column="2" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bekyiu/VM.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        <state>
+          <caret column="11" selection-start-column="11" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/StaticsTest/StaticsTest.tst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="15" lean-forward="true" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FunctionCalls/StaticsTest/Sys.vm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
         </state>
       </provider>
     </entry>

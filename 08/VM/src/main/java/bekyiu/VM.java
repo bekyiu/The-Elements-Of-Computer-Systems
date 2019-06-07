@@ -11,10 +11,10 @@ public class VM
     {
         VM vm = new VM();
         // vm.buildSingle("FunctionCalls/SimpleFunction/", "SimpleFunction.vm")
-        vm.build("FunctionCalls/FibonacciElement/");
+        vm.build("FunctionCalls/StaticsTest/");
     }
 
-    // 先将每个.vm都编译出一个.asm, 最后再合并为$out.asm
+    // 先将每个.vm都编译出一个.asm, 最后再合并为out.asm
     public void build(String path)
     {
         File directory = new File(path);
@@ -53,12 +53,13 @@ public class VM
         });
         for (File file : vmFiles)
         {
+            codeWriter.setFileName(file.getName().split("\\.")[0]);
             translateSingle(directory.getPath(), file.getName());
         }
     }
 
     // merge directory目录下 所有后缀为suffix的文件(一边merge一边删除)
-    // 最终生成$out.asm文件
+    // 最终生成out.asm文件
     private void mergeAndDelete(File directory, String suffix)
     {
         File[] files = directory.listFiles((dir, name) ->
@@ -67,12 +68,14 @@ public class VM
             return split[1].equals(suffix);
         });
 
-        File out = new File(directory.getPath(), "$out.asm");
+        File out = new File(directory.getPath(), "out.asm");
         BufferedReader br = null;
         BufferedWriter bw = null;
         try
         {
             bw = new BufferedWriter(new FileWriter(out, true));
+            // 写入bootstrap code
+            bw.write(codeWriter.writeInit());
             for (File file : files)
             {
                 br = new BufferedReader(new FileReader(file));
@@ -96,6 +99,7 @@ public class VM
         }
     }
 
+
     public void translateSingle(String path, String fileName)
     {
         File vmFile = new File(path, fileName);
@@ -112,6 +116,12 @@ public class VM
             String line = "";
             while ((line = br.readLine()) != null)
             {
+//                if(line.startsWith("//") || line.equals(""))
+//                {
+//                    continue;
+//                }
+//                bw.write("// " + line);
+//                bw.newLine();
                 String asm = getAsmCode(line);
                 if (asm != null)
                 {

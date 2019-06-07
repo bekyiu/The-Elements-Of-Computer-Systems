@@ -1,3 +1,9 @@
+@261
+D = A
+@SP
+M = D
+@Sys.init
+0; JMP
 (Main.fibonacci)
 @0
 D = A
@@ -162,7 +168,7 @@ D = M - D
 M = D
 @SP
 M = M + 1
-@RETURN-ADDRESS2
+@Main.fibonacci$ret.2
 D = A
 @SP
 A = M
@@ -211,7 +217,7 @@ D = M
 M = D
 @Main.fibonacci
 0; JMP
-(RETURN-ADDRESS2)
+(Main.fibonacci$ret.2)
 @0
 D = A
 @ARG
@@ -240,7 +246,7 @@ D = M - D
 M = D
 @SP
 M = M + 1
-@RETURN-ADDRESS3
+@Main.fibonacci$ret.3
 D = A
 @SP
 A = M
@@ -289,7 +295,7 @@ D = M
 M = D
 @Main.fibonacci
 0; JMP
-(RETURN-ADDRESS3)
+(Main.fibonacci$ret.3)
 @SP
 M = M - 1
 A = M
@@ -385,7 +391,7 @@ A = M
 M = D
 @SP
 M = M + 1
-@RETURN-ADDRESS5
+@Main.fibonacci$ret.5
 D = A
 @SP
 A = M
@@ -434,7 +440,7 @@ D = M
 M = D
 @Main.fibonacci
 0; JMP
-(RETURN-ADDRESS5)
+(Main.fibonacci$ret.5)
 (WHILE)
 @WHILE
 0; JMP
