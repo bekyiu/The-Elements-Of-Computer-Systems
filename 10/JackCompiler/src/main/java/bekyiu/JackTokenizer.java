@@ -2,12 +2,13 @@ package bekyiu;
 
 import lombok.Getter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // 把.jack文件转换为token流
 public class JackTokenizer
@@ -98,11 +99,22 @@ public class JackTokenizer
         symbols.add("=");
         symbols.add("~");
     }
-    public static void main(String[] args)
-    {
-        System.out.println(new JackTokenizer("ArrayTest/Main.jack"));
 
+    public static void main(String[] args) throws Exception
+    {
+        JackTokenizer jackTokenizer = new JackTokenizer("ArrayTest/Main.jack");
+        List<String> tokens = jackTokenizer.getTokens();
+        BufferedWriter bw = new BufferedWriter(new FileWriter("test.xml"));
+        for (String token : tokens)
+        {
+            String type = jackTokenizer.tokenType(token);
+            String line = "<" + type.toLowerCase() + "> " + token + " <" + type.toLowerCase() + "/>";
+            bw.write(line);
+            bw.newLine();
+            bw.flush();
+        }
     }
+
     public JackTokenizer(String path)
     {
         init();
@@ -112,15 +124,18 @@ public class JackTokenizer
         {
             br = new BufferedReader(new FileReader(file));
             String line = "";
-            while((line = br.readLine()) != null)
+            while ((line = br.readLine()) != null)
             {
-                if(line.equals("") || line.startsWith("//") || line.startsWith("/*"))
+                if (line.equals("") || line.startsWith("//") || line.startsWith("/*"))
                 {
                     continue;
                 }
                 String s = filter(line);
                 System.out.println(s);
-                addTokens(s);
+                if (!s.equals(""))
+                {
+                    addTokens(s);
+                }
             }
         }
         catch (Exception e)
@@ -131,7 +146,11 @@ public class JackTokenizer
         {
             try
             {
-                br.close();
+                if (br != null)
+                {
+
+                    br.close();
+                }
             }
             catch (IOException e)
             {
@@ -142,64 +161,102 @@ public class JackTokenizer
 
     private void addTokens(String s)
     {
-        String[] split = s.split(" ");
+        // 按空格分割, 但是排除字符串中的空格
+        String[] split = JackTokenizer.splitPlus(s);
         for (String sp : split)
         {
-            for (int i = 0; i < sp.length(); i++)
+            // 如果sp是下列之一, 就直接添加了
+            if (symbols.contains(sp) || keywords.contains(sp) || isIdentifier(sp) || isIntegerConstants(sp))
             {
+                tokens.add(sp);
+                continue;
+            }
 
+            //
+            int start = 0;
+            for (int end = 0; end < sp.length(); end++)
+            {
+                String sub = sp.substring(start, end + 1);
+                if (symbols.contains(sub) || keywords.contains(sub))
+                {
+                    tokens.add(sub);
+                    start = end + 1;
+                    continue;
+                }
+
+                // 如果当前end + 1指向的是一个symbol, 那么从start到end一定是个identifier
+                // 第一个条件用于短路, 不然后面 charAt可能会越界
+                if (end + 1 < sp.length() && symbols.contains(String.valueOf(sp.charAt(end + 1))))
+                {
+                    tokens.add(sp.substring(start, end + 1));
+                    start = end + 1;
+                    continue;
+                }
+
+                // 处理字符串, 此时start指向 ", end + 1指向 " 的下一个字符
+                if (sub.startsWith("\""))
+                {
+                    String temp = "";
+                    for (int j = end + 1; ; j++)
+                    {
+                        if (sp.charAt(j) != '"')
+                        {
+                            temp += sp.charAt(j);
+                        }
+                        else
+                        {
+                            start = j + 1;
+                            end = j;
+                            break;
+                        }
+                    }
+                    tokens.add(temp);
+                    continue;
+                }
+
+                // 可能有while (temp < 10)中 (temp 的这种情况
+                // 如果start - 1指向的是symbol, 并且start指向的不是 " , 那么从start到sp.length
+                // 或者从start到下一个symbol之间的一定是一个identifier
+                if (start - 1 >= 0 && symbols.contains(String.valueOf(sp.charAt(start - 1))))
+                {
+                    int j = 0;
+                    for (; j < sp.length(); j++)
+                    {
+                        if()
+                    }
+                    tokens.add(sub);
+                    start = end + 1;
+                    continue;
+                }
             }
         }
     }
 
     public static boolean isIntegerConstants(String token)
     {
-        Integer integer = null;
-        try
+        if (Pattern.matches("\\d+", token))
         {
-            integer = Integer.valueOf(token);
-        }
-        catch (NumberFormatException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-        return integer >= 0 && integer <= 32767;
-    }
-    public static boolean isStringConstants(String token)
-    {
-        if(token.startsWith("\"") && token.endsWith("\""))
-        {
-            if(!token.equals("\"") && !token.equals("\n"))
-            {
-                return true;
-            }
+            Integer integer = Integer.valueOf(token);
+            return integer >= 0 && integer <= 32767;
         }
         return false;
+    }
+
+    // 好像没什么卵用
+    public static boolean isStringConstants(String token)
+    {
+        return Pattern.matches("\"([\\s\\S]*?)\"", token);
     }
 
     //A~Z 65~90, a~z 97~122, 0~9 48~57, _ 95
     public static boolean isIdentifier(String token)
     {
-        for (int i = 0; i < token.length(); i++)
+        char first = token.charAt(0);
+        if (first >= 48 && first <= 57)
         {
-            int ch = token.charAt(i);
-            if((ch >= 65 && ch<=90) || (ch >= 97 && ch <= 122) || (ch >= 48 && ch <= 57) || ch == 95)
-            {
-                if(i == 0)
-                {
-                    if(ch >= 48 && ch <= 57)
-                    {
-                        return false;
-                    }
-                }
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
-        return true;
+        return Pattern.matches("\\w+", token);
     }
 
     // 仅当type 为keyword时调用
@@ -223,29 +280,31 @@ public class JackTokenizer
     {
         return token.substring(1, token.lastIndexOf("\""));
     }
+
     public String tokenType(String token)
     {
-        if(keywords.contains(token))
+        if (keywords.contains(token))
         {
             return KEYWORD;
         }
-        if(symbols.contains(token))
+        if (symbols.contains(token))
         {
             return SYMBOL;
         }
-        if(isIdentifier(token))
+        if (isIdentifier(token))
         {
             return IDENTIFIER;
         }
-        if(isIntegerConstants(token))
+        if (isIntegerConstants(token))
         {
             return INT_CONST;
         }
-        if(isStringConstants(token))
-        {
-            return STRING_CONST;
-        }
-        return null;
+//        if (isStringConstants(token))
+//        {
+//            return STRING_CONST;
+//        }
+        // token是不带双引号的 所以没有办法通过isStringConstants判断
+        return STRING_CONST;
     }
 
     // 注释可能会跟在语句后面
@@ -263,5 +322,35 @@ public class JackTokenizer
     {
         str = escapeComment(str);
         return str.trim();
+    }
+
+    // 按空格分割, 但是排除字符串中的空格
+    public static String[] splitPlus(String s)
+    {
+        // 先取出双引号及其内容 "([\s\S]*?)"
+        Pattern p = Pattern.compile("\"([\\s\\S]*?)\"");
+        Matcher matcher = p.matcher(s);
+        Queue<String> reps = new ArrayDeque<>();
+
+        // 将所有的 "xxxx" 一律替换为 !***!
+        while (matcher.find())
+        {
+            //"xxxx"
+            String temp = matcher.group();
+            reps.add(temp);
+            s = s.replace(temp, "!***!");
+        }
+
+        String[] sp = s.split(" ");
+        // 再替换回来
+        for (int i = 0; i < sp.length; i++)
+        {
+            if (sp[i].contains("!***!"))
+            {
+                sp[i] = sp[i].replace("!***!", reps.remove());
+
+            }
+        }
+        return sp;
     }
 }
