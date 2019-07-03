@@ -15,7 +15,7 @@ public class JackTokenizer
 {
     // 用来存放.jack文件中遇到的token
     @Getter
-    private List<String> tokens = new ArrayList<>();
+    private Queue<String> tokens = new ArrayDeque<>();
     /*
     以下是jack支持的token, 除此以外还有
     integerConstants 0~32767的十进制整数,
@@ -26,34 +26,34 @@ public class JackTokenizer
     private List<String> symbols = new ArrayList<>();
 
     // token的类型
-    public static final String KEYWORD = "KEYWORD";
-    public static final String SYMBOL = "SYMBOL";
-    public static final String IDENTIFIER = "IDENTIFIER";
-    public static final String INT_CONST = "INT_CONST";
-    public static final String STRING_CONST = "STRING_CONST";
+    public static final String KEYWORD = "keyword";
+    public static final String SYMBOL = "symbol";
+    public static final String IDENTIFIER = "identifier";
+    public static final String INT_CONST = "int_const";
+    public static final String STRING_CONST = "string_const";
 
     // keyword
-    public static final String CLASS = "CLASS";
-    public static final String METHOD = "METHOD";
-    public static final String INT = "INT";
-    public static final String FUNCTION = "FUNCTION";
-    public static final String BOOLEAN = "BOOLEAN";
-    public static final String CONSTRUCTOR = "CONSTRUCTOR";
-    public static final String CHAR = "CHAR";
-    public static final String VOID = "VOID";
-    public static final String VAR = "VAR";
-    public static final String STATIC = "STATIC";
-    public static final String FIELD = "FIELD";
-    public static final String LET = "LET";
-    public static final String DO = "DO";
-    public static final String IF = "IF";
-    public static final String ELSE = "ELSE";
-    public static final String WHILE = "WHILE";
-    public static final String RETURN = "RETURN";
-    public static final String TRUE = "TRUE";
-    public static final String FALSE = "FALSE";
-    public static final String NULL = "NULL";
-    public static final String THIS = "THIS";
+    public static final String CLASS = "class";
+    public static final String METHOD = "method";
+    public static final String INT = "int";
+    public static final String FUNCTION = "function";
+    public static final String BOOLEAN = "boolean";
+    public static final String CONSTRUCTOR = "constructor";
+    public static final String CHAR = "char";
+    public static final String VOID = "void";
+    public static final String VAR = "var";
+    public static final String STATIC = "static";
+    public static final String FIELD = "field";
+    public static final String LET = "let";
+    public static final String DO = "do";
+    public static final String IF = "if";
+    public static final String ELSE = "else";
+    public static final String WHILE = "while";
+    public static final String RETURN = "return";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
+    public static final String NULL = "null";
+    public static final String THIS = "this";
 
     private void init()
     {
@@ -100,24 +100,32 @@ public class JackTokenizer
         symbols.add("~");
     }
 
-    public static void main(String[] args) throws Exception
-    {
-        JackTokenizer jackTokenizer = new JackTokenizer("Square/SquareGame.jack");
-        List<String> tokens = jackTokenizer.getTokens();
-        BufferedWriter bw = new BufferedWriter(new FileWriter("test3.xml"));
-        for (String token : tokens)
-        {
-            String type = jackTokenizer.tokenType(token);
-            String line = "<" + type.toLowerCase() + "> " + token + " <" + type.toLowerCase() + "/>";
-            bw.write(line);
-            bw.newLine();
-            bw.flush();
-        }
-    }
+//    public static void main(String[] args) throws Exception
+//    {
+//        JackTokenizer jackTokenizer = new JackTokenizer("Square/SquareGame.jack");
+//        List<String> tokens = jackTokenizer.getTokens();
+//        BufferedWriter bw = new BufferedWriter(new FileWriter("test3.xml"));
+//        for (String token : tokens)
+//        {
+//            String type = jackTokenizer.tokenType(token);
+//            String line = "<" + type.toLowerCase() + "> " + token + " <" + type.toLowerCase() + "/>";
+//            bw.write(line);
+//            bw.newLine();
+//            bw.flush();
+//        }
+//    }
 
+    //path "Square/SquareGame.jack"
     public JackTokenizer(String path)
     {
         init();
+        buildSingle(path);
+    }
+
+    // 将一个.jack文件提取出token
+    public void buildSingle(String path)
+    {
+        tokens.clear();
         File file = new File(path);
         BufferedReader br = null;
         try
@@ -131,8 +139,6 @@ public class JackTokenizer
                 {
                     continue;
                 }
-
-                System.out.println(s);
                 if (!s.equals(""))
                 {
                     addTokens(s);
