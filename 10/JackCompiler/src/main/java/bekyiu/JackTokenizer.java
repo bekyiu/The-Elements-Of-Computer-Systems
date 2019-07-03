@@ -102,9 +102,9 @@ public class JackTokenizer
 
     public static void main(String[] args) throws Exception
     {
-        JackTokenizer jackTokenizer = new JackTokenizer("ArrayTest/Main.jack");
+        JackTokenizer jackTokenizer = new JackTokenizer("Square/SquareGame.jack");
         List<String> tokens = jackTokenizer.getTokens();
-        BufferedWriter bw = new BufferedWriter(new FileWriter("test.xml"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("test3.xml"));
         for (String token : tokens)
         {
             String type = jackTokenizer.tokenType(token);
@@ -126,11 +126,12 @@ public class JackTokenizer
             String line = "";
             while ((line = br.readLine()) != null)
             {
-                if (line.equals("") || line.startsWith("//") || line.startsWith("/*"))
+                String s = filter(line);
+                if (s.equals("") || s.startsWith("//") || s.startsWith("/*") || s.startsWith("*"))
                 {
                     continue;
                 }
-                String s = filter(line);
+
                 System.out.println(s);
                 if (!s.equals(""))
                 {
@@ -165,6 +166,10 @@ public class JackTokenizer
         String[] split = JackTokenizer.splitPlus(s);
         for (String sp : split)
         {
+            if(sp.equals(""))
+            {
+                continue;
+            }
             // 如果sp是下列之一, 就直接添加了
             if (symbols.contains(sp) || keywords.contains(sp) || isIdentifier(sp) || isIntegerConstants(sp))
             {
@@ -219,14 +224,28 @@ public class JackTokenizer
                 // 或者从start到下一个symbol之间的一定是一个identifier
                 if (start - 1 >= 0 && symbols.contains(String.valueOf(sp.charAt(start - 1))))
                 {
-                    int j = 0;
+                    int j = start;
+                    boolean flag = false;
                     for (; j < sp.length(); j++)
                     {
-                        if()
+                        if (symbols.contains(String.valueOf(sp.charAt(j))))
+                        {
+                            tokens.add(sp.substring(start, j));
+                            start = j;
+                            end = j - 1;
+                            flag = true;
+                            break;
+                        }
                     }
-                    tokens.add(sub);
-                    start = end + 1;
-                    continue;
+                    if (!flag)
+                    {
+                        tokens.add(sp.substring(start, j));
+                        // 能进到这里说明已经是sp的最后了, 所以start和end的值都不重要了
+                        // 只要让end++之后 能够退出循环即可
+                        start = j;
+                        end = j - 1;
+                    }
+
                 }
             }
         }

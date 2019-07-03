@@ -48,6 +48,7 @@
 <symbol> ; <symbol/>
 <keyword> while <keyword/>
 <symbol> ( <symbol/>
+<identifier> i <identifier/>
 <symbol> < <symbol/>
 <identifier> length <identifier/>
 <symbol> ) <symbol/>
@@ -85,6 +86,7 @@
 <symbol> ; <symbol/>
 <keyword> while <keyword/>
 <symbol> ( <symbol/>
+<identifier> i <identifier/>
 <symbol> < <symbol/>
 <identifier> length <identifier/>
 <symbol> ) <symbol/>
@@ -120,6 +122,7 @@
 <symbol> . <symbol/>
 <identifier> printInt <identifier/>
 <symbol> ( <symbol/>
+<identifier> sum <identifier/>
 <symbol> / <symbol/>
 <identifier> length <identifier/>
 <symbol> ) <symbol/>

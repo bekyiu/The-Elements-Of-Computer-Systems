@@ -7,7 +7,7 @@ public class Test
     public static void main(String[] args)
     {
 
-        String s = "let length = Keyboard.readInt(\"HOW MANY NUMBERS? z\nz\", abc, \"w  ww\");";
+        String s = "if (key = 81)  { let exit = true; }";
 
         String[] sp = JackTokenizer.splitPlus(s);
         System.out.println(Arrays.toString(sp));
