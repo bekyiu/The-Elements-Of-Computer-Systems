@@ -86,7 +86,7 @@ public class CompilationEngine
         }
     }
 
-    // 编译静态声明或字段声明, 可以没有
+    // 编译静态声明或字段声明, 可以没有, 可以有多个
     public void compileClassVarDec() throws IOException
     {
         Queue<String> tokens = tokenizer.getTokens();
@@ -98,29 +98,34 @@ public class CompilationEngine
             tokens.remove();
             write("<classVarDec>");
             write("<keyword>" + token + "</keyword>");
-            // type
+            // type, 基本类型和引用类型
             token = tokens.remove();
             if (JackTokenizer.INT.equals(token) || JackTokenizer.BOOLEAN.equals(token) ||
                     JackTokenizer.CHAR.equals(token))
             {
                 write("<keyword>" + token + "</keyword>");
+            }
+            else
+            {
+                write("<identifier>" + token + "</identifier>");
+            }
+            //varName
+            token = tokens.remove();
+            write("<identifier>" + token + "</identifier>");
+            //, or ;
+            token = tokens.remove();
+            while (!token.equals(";"))
+            {
+                //,
+                write("<symbol>" + token + "</symbol>");
                 //varName
                 token = tokens.remove();
                 write("<identifier>" + token + "</identifier>");
-                //, or ;
                 token = tokens.remove();
-                while (!token.equals(";"))
-                {
-                    //,
-                    write("<symbol>" + token + "</symbol>");
-                    //varName
-                    token = tokens.remove();
-                    write("<identifier>" + token + "</identifier>");
-                    token = tokens.remove();
-                }
-                //此时 token等于 ;
-                write("<symbol>" + token + "</symbol>");
             }
+            //此时 token等于 ;
+            write("<symbol>" + token + "</symbol>");
+
             write("</classVarDec>");
         }
         else if (!JackTokenizer.FUNCTION.equals(token) && !JackTokenizer.CONSTRUCTOR.equals(token) &&
@@ -130,7 +135,83 @@ public class CompilationEngine
         }
     }
 
-    public void compileSubroutine()
+    // 编译方法, 构造函数, 静态函数 可以没有, 可以有多个
+    public void compileSubroutine() throws IOException
+    {
+        Queue<String> tokens = tokenizer.getTokens();
+        // function method constructor }
+        String token = tokens.element();
+        if (JackTokenizer.FUNCTION.equals(token) || JackTokenizer.CONSTRUCTOR.equals(token) ||
+                JackTokenizer.METHOD.equals(token))
+        {
+            tokens.remove();
+            write("<subroutineDec>");
+            write("<keyword>" + token + "</keyword>");
+            // 函数的返回值, void, 基本类型, 引用
+            token = tokens.remove();
+            if (JackTokenizer.INT.equals(token) || JackTokenizer.BOOLEAN.equals(token) ||
+                    JackTokenizer.CHAR.equals(token) || JackTokenizer.VOID.equals(token))
+            {
+                write("<keyword>" + token + "</keyword>");
+            }
+            else
+            {
+                write("<identifier>" + token + "</identifier>");
+            }
+            // function name
+            token = tokens.remove();
+            write("<identifier>" + token + "</identifier>");
+            // (
+            token = tokens.remove();
+            write("<symbol>" + token + "</symbol>");
+            compileParameterList();
+            write("<symbol>)</symbol>");
+            compileSubroutineBody();
+            write("</subroutineDec>");
+        }
+        else if (!token.equals("}"))
+        {
+            throw new RuntimeException("期望是 function, method, constructor, }, 但实际上是" + token);
+        }
+    }
+
+    // 函数参数列表 z x, z x, z x 也可以是什么都没有
+    public void compileParameterList() throws IOException
+    {
+        write("<parameterList>");
+        Queue<String> tokens = tokenizer.getTokens();
+        // type, )
+        String token = tokens.remove();
+
+        while (!")".equals(token))
+        {
+            if (JackTokenizer.INT.equals(token) || JackTokenizer.BOOLEAN.equals(token) ||
+                    JackTokenizer.CHAR.equals(token))
+            {
+                write("<keyword>" + token + "</keyword>");
+            }
+            else
+            {
+                write("<identifier>" + token + "</identifier>");
+            }
+            //varName
+            token = tokens.remove();
+            write("<identifier>" + token + "</identifier>");
+            //, or )
+            token = tokens.remove();
+            if (",".equals(token))
+            {
+                write("<symbol>" + token + "</symbol>");
+                token = tokens.remove();
+            }
+        }
+        // 此时token是 )
+//        write("<symbol>" + token + "</symbol>");
+        write("</parameterList>");
+    }
+
+    // 编译函数体{...}
+    public void compileSubroutineBody()
     {
 
     }
