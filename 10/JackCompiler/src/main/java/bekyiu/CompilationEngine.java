@@ -151,8 +151,7 @@ public class CompilationEngine
         }
     }
 
-    // 编译方法, 构造函数, 静态函数 可以没有, 可以有多个
-    public void compileSubroutine() throws IOException
+    private void compileSubroutine1() throws IOException
     {
         Queue<String> tokens = tokenizer.getTokens();
         // function method constructor }
@@ -187,6 +186,19 @@ public class CompilationEngine
         else if (!token.equals("}"))
         {
             throw new RuntimeException("期望是 function, method, constructor, }, 但实际上是" + token);
+        }
+    }
+
+    // 编译方法, 构造函数, 静态函数 可以没有, 可以有多个
+    public void compileSubroutine() throws IOException
+    {
+        Queue<String> tokens = tokenizer.getTokens();
+        // function method constructor }
+        String token = tokens.element();
+        while (!"}".equals(token))
+        {
+            compileSubroutine1();
+            token = tokens.element();
         }
     }
 
@@ -311,9 +323,8 @@ public class CompilationEngine
                 JackTokenizer.CHAR.equals(token);
     }
 
-    public void compileStatements() throws IOException
+    private void compileStatements1() throws IOException
     {
-        write("<statements>");
         Queue<String> tokens = tokenizer.getTokens();
         // let if while do return }
         String token = tokens.element();
@@ -336,6 +347,18 @@ public class CompilationEngine
         else if (JackTokenizer.RETURN.equals(token))
         {
             compileReturn();
+        }
+    }
+
+    public void compileStatements() throws IOException
+    {
+        write("<statements>");
+        Queue<String> tokens = tokenizer.getTokens();
+        String token = tokens.element();
+        while (!"}".equals(token))
+        {
+            compileStatements1();
+            token = tokens.element();
         }
         write("</statements>");
     }
@@ -381,6 +404,9 @@ public class CompilationEngine
             write("<symbol>" + token + "</symbol>");
 
         }
+        //;
+        token = tokens.remove();
+        write("<symbol>" + token + "</symbol>");
         write("</doStatement>");
 
     }
@@ -449,7 +475,12 @@ public class CompilationEngine
         String token = tokens.remove();
         write("<returnStatement>");
         write("<keyword>" + token + "</keyword>");
-        compileExpression();
+        //; or exp
+        token = tokens.element();
+        if (!";".equals(token))
+        {
+            compileExpression();
+        }
         // ;
         token = tokens.remove();
         write("<symbol>" + token + "</symbol>");
@@ -516,6 +547,8 @@ public class CompilationEngine
     public void compileExpressionList() throws IOException
     {
         Queue<String> tokens = tokenizer.getTokens();
+        write("<expressionList>");
+
         // ) or xx
         String token = tokens.element();
         if (!")".equals(token))
@@ -533,6 +566,7 @@ public class CompilationEngine
                 token = tokens.element();
             }
         }
+        write("</expressionList>");
 
     }
 }
