@@ -1,11 +1,12 @@
 package bekyiu;
 
-import jdk.nashorn.internal.parser.Token;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
 import java.util.Queue;
 
 public class CompilationEngine
@@ -41,7 +42,7 @@ public class CompilationEngine
     // 编译整个class
     public void compileClass() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // 应当取出 class
         String clazzToken = tokens.remove();
         if (JackTokenizer.CLASS.equals(clazzToken))
@@ -91,7 +92,7 @@ public class CompilationEngine
     // 编译静态声明或字段声明, 可以没有, 可以有多个
     public void compileClassVarDec() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         //如果声明了字段, 那么这个token应该是static或者field
         //如果没有声明字段, 则应该是function method constructor } (空的类)
         String token = tokens.element();
@@ -106,7 +107,7 @@ public class CompilationEngine
 
     private void compileClassVarDec1() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         //如果声明了字段, 那么这个token应该是static或者field
         //如果没有声明字段, 则应该是function method constructor } (空的类)
         String token = tokens.element();
@@ -153,7 +154,7 @@ public class CompilationEngine
 
     private void compileSubroutine1() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // function method constructor }
         String token = tokens.element();
         if (JackTokenizer.FUNCTION.equals(token) || JackTokenizer.CONSTRUCTOR.equals(token) ||
@@ -192,7 +193,7 @@ public class CompilationEngine
     // 编译方法, 构造函数, 静态函数 可以没有, 可以有多个
     public void compileSubroutine() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // function method constructor }
         String token = tokens.element();
         while (!"}".equals(token))
@@ -206,7 +207,7 @@ public class CompilationEngine
     public void compileParameterList() throws IOException
     {
         write("<parameterList>");
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // type, )
         String token = tokens.remove();
 
@@ -239,7 +240,7 @@ public class CompilationEngine
     // 编译函数体{...}
     public void compileSubroutineBody() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // {
         String token = tokens.remove();
         if ("{".equals(token))
@@ -261,7 +262,7 @@ public class CompilationEngine
 
     public void compileVarDec() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // var, 不是var(statements)
         String token = tokens.element();
         while (JackTokenizer.VAR.equals(token))
@@ -273,7 +274,7 @@ public class CompilationEngine
 
     private void compileVarDec1() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // 假设是 var
         String token = tokens.remove();
         write("<varDec>");
@@ -315,7 +316,7 @@ public class CompilationEngine
 
     private void compileStatements1() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // let if while do return }
         String token = tokens.element();
         if (JackTokenizer.LET.equals(token))
@@ -343,7 +344,7 @@ public class CompilationEngine
     public void compileStatements() throws IOException
     {
         write("<statements>");
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         String token = tokens.element();
         while (!"}".equals(token))
         {
@@ -353,16 +354,13 @@ public class CompilationEngine
         write("</statements>");
     }
 
-    public void compileDo() throws IOException
+    //xxx.xx(a, b, c)   zz(x, x)
+    private void compileSubroutineCall() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
-        // do
-        String token = tokens.remove();
-        write("<doStatement>");
-        write("<keyword>" + token + "</keyword>");
+        Deque<String> tokens = tokenizer.getTokens();
         // fun(xx); or xx.fun(xx);
         // funName, className, varName
-        token = tokens.remove();
+        String token = tokens.remove();
         //( or .
         String nextToken = tokens.element();
         if ("(".equals(nextToken))
@@ -394,6 +392,15 @@ public class CompilationEngine
             write("<symbol>" + token + "</symbol>");
 
         }
+    }
+    public void compileDo() throws IOException
+    {
+        Deque<String> tokens = tokenizer.getTokens();
+        // do
+        String token = tokens.remove();
+        write("<doStatement>");
+        write("<keyword>" + token + "</keyword>");
+        compileSubroutineCall();
         //;
         token = tokens.remove();
         write("<symbol>" + token + "</symbol>");
@@ -403,7 +410,7 @@ public class CompilationEngine
 
     public void compileLet() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // let
         String token = tokens.remove();
         write("<letStatement>");
@@ -436,7 +443,7 @@ public class CompilationEngine
 
     public void compileWhile() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // while
         String token = tokens.remove();
         write("<whileStatement>");
@@ -460,7 +467,7 @@ public class CompilationEngine
 
     public void compileReturn() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // return
         String token = tokens.remove();
         write("<returnStatement>");
@@ -479,7 +486,7 @@ public class CompilationEngine
 
     public void compileIf() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         // if
         String token = tokens.remove();
         write("<ifStatement>");
@@ -516,27 +523,86 @@ public class CompilationEngine
         write("</ifStatement>");
     }
 
-    //expressionless
     public void compileExpression() throws IOException
     {
         write("<expression>");
+        Deque<String> tokens = tokenizer.getTokens();
+        // term
         compileTerm();
+        //op or ) or ; or ] or ,
+        String token = tokens.element();
+        List<String> op = Arrays.asList("+", "-", "*", "/", "&", "|", "<", ">", "=");
+        while (op.contains(token))
+        {
+            token = tokens.remove();
+            write("<symbol>" + token + "</symbol>");
+            compileTerm();
+            token = tokens.element();
+        }
         write("</expression>");
     }
 
     public void compileTerm() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
-        // if ( x )
+        List<String> keywordConstant = Arrays.asList("true", "false", "null", "this");
+        Deque<String> tokens = tokenizer.getTokens();
+        // term
         String token = tokens.remove();
+        String nextToken = tokens.element();
         write("<term>");
-        write("<identifier>" + token + "</identifier>");
+        if (JackTokenizer.isIntegerConstants(token))
+        {
+            write("<integerConstant>" + token + "</integerConstant>");
+        }
+        else if (keywordConstant.contains(token))
+        {
+            write("<keyword>" + token + "</keyword>");
+        }
+        else if (JackTokenizer.isIdentifier(token) && !"(".equals(nextToken) && !".".equals(nextToken))
+        {
+            write("<identifier>" + token + "</identifier>");
+            if("[".equals(nextToken))
+            {
+                token = tokens.remove();
+                write("<symbol>" + token + "</symbol>");
+                compileExpression();
+                // ]
+                token = tokens.remove();
+                write("<symbol>" + token + "</symbol>");
+            }
+        }
+        else if ("(".equals(nextToken) || ".".equals(nextToken))
+        {
+            // 此时队首的token是一个funName
+            tokens.addFirst(token);
+//            write("<subroutineCall>");
+            compileSubroutineCall();
+//            write("</subroutineCall>");
+        }
+        else if("(".equals(token))
+        {
+            write("<symbol>" + token + "</symbol>");
+            compileExpression();
+            // )
+            token = tokens.remove();
+            write("<symbol>" + token + "</symbol>");
+        }
+        else if("-".equals(token) || "~".equals(token))
+        {
+            write("<symbol>" + token + "</symbol>");
+            compileTerm();
+        }
+        else
+        {
+            // String Constant
+            write("<stringConstant>" + token + "</stringConstant>");
+        }
         write("</term>");
     }
 
     public void compileExpressionList() throws IOException
     {
-        Queue<String> tokens = tokenizer.getTokens();
+        Deque<String> tokens = tokenizer.getTokens();
         write("<expressionList>");
 
         // ) or xx
@@ -557,6 +623,5 @@ public class CompilationEngine
             }
         }
         write("</expressionList>");
-
     }
 }

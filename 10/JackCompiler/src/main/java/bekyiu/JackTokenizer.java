@@ -3,10 +3,7 @@ package bekyiu;
 import lombok.Getter;
 
 import java.io.*;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +12,7 @@ public class JackTokenizer
 {
     // 用来存放.jack文件中遇到的token
     @Getter
-    private Queue<String> tokens = new ArrayDeque<>();
+    private Deque<String> tokens = new ArrayDeque<>();
     /*
     以下是jack支持的token, 除此以外还有
     integerConstants 0~32767的十进制整数,
@@ -100,20 +97,6 @@ public class JackTokenizer
         symbols.add("~");
     }
 
-//    public static void main(String[] args) throws Exception
-//    {
-//        JackTokenizer jackTokenizer = new JackTokenizer("Square/SquareGame.jack");
-//        List<String> tokens = jackTokenizer.getTokens();
-//        BufferedWriter bw = new BufferedWriter(new FileWriter("test3.xml"));
-//        for (String token : tokens)
-//        {
-//            String type = jackTokenizer.tokenType(token);
-//            String line = "<" + type.toLowerCase() + "> " + token + " <" + type.toLowerCase() + "/>";
-//            bw.write(line);
-//            bw.newLine();
-//            bw.flush();
-//        }
-//    }
 
     //path "Square/SquareGame.jack"
     public JackTokenizer(String path)
@@ -139,6 +122,7 @@ public class JackTokenizer
                 {
                     continue;
                 }
+//                System.out.println(s);
                 if (!s.equals(""))
                 {
                     addTokens(s);
@@ -172,7 +156,7 @@ public class JackTokenizer
         String[] split = JackTokenizer.splitPlus(s);
         for (String sp : split)
         {
-            if(sp.equals(""))
+            if (sp.equals(""))
             {
                 continue;
             }
@@ -337,7 +321,7 @@ public class JackTokenizer
     {
         if (str.contains("//"))
         {
-            return str.substring(0, str.indexOf("/"));
+            return str.substring(0, str.lastIndexOf("//"));
         }
         return str;
     }
