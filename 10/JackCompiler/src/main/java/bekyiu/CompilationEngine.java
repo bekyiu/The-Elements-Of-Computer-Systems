@@ -297,16 +297,6 @@ public class CompilationEngine
         {
             //,
             write("<symbol>" + token + "</symbol>");
-            //type
-            token = tokens.remove();
-            if (typeCheck(token))
-            {
-                write("<keyword>" + token + "</keyword>");
-            }
-            else
-            {
-                write("<identifier>" + token + "</identifier>");
-            }
             //varName
             token = tokens.remove();
             write("<identifier>" + token + "</identifier>");
