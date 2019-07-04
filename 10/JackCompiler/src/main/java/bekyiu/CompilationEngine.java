@@ -1,4 +1,3 @@
-
 package bekyiu;
 
 import java.io.BufferedWriter;
@@ -8,7 +7,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
-import java.util.Queue;
 
 public class CompilationEngine
 {
@@ -27,10 +25,20 @@ public class CompilationEngine
         {
             e.printStackTrace();
         }
-//        finally
-//        {
-//            bw.close();
-//        }
+        finally
+        {
+            try
+            {
+                if (bw != null)
+                {
+                    bw.close();
+                }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void write(String s) throws IOException
@@ -38,6 +46,35 @@ public class CompilationEngine
         bw.write(s);
         bw.newLine();
         bw.flush();
+    }
+
+    //terminal rule
+    private void writeTerminal(String token) throws IOException
+    {
+        if (tokenizer.tokenType(token).equals(JackTokenizer.KEYWORD))
+        {
+            write("<keyword>" + token + "</keyword>");
+        }
+        else if (tokenizer.tokenType(token).equals(JackTokenizer.IDENTIFIER))
+        {
+            write("<identifier>" + token + "</identifier>");
+        }
+        else if (tokenizer.tokenType(token).equals(JackTokenizer.SYMBOL))
+        {
+            write("<symbol>" + token + "</symbol>");
+        }
+        else if (tokenizer.tokenType(token).equals(JackTokenizer.INT_CONST))
+        {
+            write("<integerConstant>" + token + "</integerConstant>");
+        }
+        else if (tokenizer.tokenType(token).equals(JackTokenizer.STRING_CONST))
+        {
+            write("<stringConstant>" + token + "</stringConstant>");
+        }
+        else
+        {
+            write("error");
+        }
     }
 
     // 编译整个class
@@ -49,12 +86,12 @@ public class CompilationEngine
         if (JackTokenizer.CLASS.equals(clazzToken))
         {
             write("<class>");
-            write("<keyword>" + clazzToken + "</keyword>");
+            writeTerminal(clazzToken);
             // 应当取出 className
             String token = tokens.remove();
             if (JackTokenizer.isIdentifier(token))
             {
-                write("<identifier>" + token + "</identifier>");
+                writeTerminal(token);
             }
             else
             {
@@ -64,7 +101,7 @@ public class CompilationEngine
             token = tokens.remove();
             if (token.equals("{"))
             {
-                write("<symbol>" + token + "</symbol>");
+                writeTerminal(token);
             }
             else
             {
@@ -76,7 +113,7 @@ public class CompilationEngine
             token = tokens.remove();
             if (token.equals("}"))
             {
-                write("<symbol>" + token + "</symbol>");
+                writeTerminal(token);
             }
             else
             {
@@ -116,33 +153,33 @@ public class CompilationEngine
         {
             tokens.remove();
             write("<classVarDec>");
-            write("<keyword>" + token + "</keyword>");
+            writeTerminal(token);
             // type, 基本类型和引用类型
             token = tokens.remove();
             if (typeCheck(token))
             {
-                write("<keyword>" + token + "</keyword>");
+                writeTerminal(token);
             }
             else
             {
-                write("<identifier>" + token + "</identifier>");
+                writeTerminal(token);
             }
             //varName
             token = tokens.remove();
-            write("<identifier>" + token + "</identifier>");
+            writeTerminal(token);
             //, or ;
             token = tokens.remove();
             while (!token.equals(";"))
             {
                 //,
-                write("<symbol>" + token + "</symbol>");
+                writeTerminal(token);
                 //varName
                 token = tokens.remove();
-                write("<identifier>" + token + "</identifier>");
+                writeTerminal(token);
                 token = tokens.remove();
             }
             //此时 token等于 ;
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
 
             write("</classVarDec>");
         }
@@ -163,25 +200,25 @@ public class CompilationEngine
         {
             tokens.remove();
             write("<subroutineDec>");
-            write("<keyword>" + token + "</keyword>");
+            writeTerminal(token);
             // 函数的返回值, void, 基本类型, 引用
             token = tokens.remove();
             if (typeCheck(token) || JackTokenizer.VOID.equals(token))
             {
-                write("<keyword>" + token + "</keyword>");
+                writeTerminal(token);
             }
             else
             {
-                write("<identifier>" + token + "</identifier>");
+                writeTerminal(token);
             }
             // function name
             token = tokens.remove();
-            write("<identifier>" + token + "</identifier>");
+            writeTerminal(token);
             // (
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             compileParameterList();
-            write("<symbol>)</symbol>");
+            writeTerminal(")");
             compileSubroutineBody();
             write("</subroutineDec>");
         }
@@ -216,20 +253,20 @@ public class CompilationEngine
         {
             if (typeCheck(token))
             {
-                write("<keyword>" + token + "</keyword>");
+                writeTerminal(token);
             }
             else
             {
-                write("<identifier>" + token + "</identifier>");
+                writeTerminal(token);
             }
             //varName
             token = tokens.remove();
-            write("<identifier>" + token + "</identifier>");
+            writeTerminal(token);
             //, or )
             token = tokens.remove();
             if (",".equals(token))
             {
-                write("<symbol>" + token + "</symbol>");
+                writeTerminal(token);
                 token = tokens.remove();
             }
         }
@@ -247,12 +284,12 @@ public class CompilationEngine
         if ("{".equals(token))
         {
             write("<subroutineBody>");
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             compileVarDec();
             compileStatements();
             // }
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             write("</subroutineBody>");
         }
         else
@@ -279,33 +316,33 @@ public class CompilationEngine
         // 假设是 var
         String token = tokens.remove();
         write("<varDec>");
-        write("<keyword>" + token + "</keyword>");
+        writeTerminal(token);
         // type
         token = tokens.remove();
         if (typeCheck(token))
         {
-            write("<keyword>" + token + "</keyword>");
+            writeTerminal(token);
         }
         else
         {
-            write("<identifier>" + token + "</identifier>");
+            writeTerminal(token);
         }
         // varName
         token = tokens.remove();
-        write("<identifier>" + token + "</identifier>");
+        writeTerminal(token);
         // , or ;
         token = tokens.remove();
         while (!token.equals(";"))
         {
             //,
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             //varName
             token = tokens.remove();
-            write("<identifier>" + token + "</identifier>");
+            writeTerminal(token);
             token = tokens.remove();
         }
         //此时 token等于 ;
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         write("</varDec>");
     }
 
@@ -362,49 +399,49 @@ public class CompilationEngine
         // fun(xx); or xx.fun(xx);
         // funName, className, varName
         String token = tokens.remove();
+        writeTerminal(token);
         //( or .
         String nextToken = tokens.element();
         if ("(".equals(nextToken))
         {
-            write("<identifier>" + token + "</identifier>");
             // (
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             compileExpressionList();
             // )
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
         }
         else if (".".equals(nextToken))
         {
-            write("<identifier>" + token + "</identifier>");
             // .
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             // funName
             token = tokens.remove();
-            write("<identifier>" + token + "</identifier>");
+            writeTerminal(token);
             // (
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             compileExpressionList();
             // )
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
 
         }
     }
+
     public void compileDo() throws IOException
     {
         Deque<String> tokens = tokenizer.getTokens();
         // do
         String token = tokens.remove();
         write("<doStatement>");
-        write("<keyword>" + token + "</keyword>");
+        writeTerminal(token);
         compileSubroutineCall();
         //;
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         write("</doStatement>");
 
     }
@@ -415,29 +452,29 @@ public class CompilationEngine
         // let
         String token = tokens.remove();
         write("<letStatement>");
-        write("<keyword>" + token + "</keyword>");
+        writeTerminal(token);
         // varName
         token = tokens.remove();
-        write("<identifier>" + token + "</identifier>");
+        writeTerminal(token);
         // a = ...., a[1] = ...
         token = tokens.remove();
         if ("[".equals(token))
         {
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             compileExpression();
             // ]
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             // =
             token = tokens.remove();
         }
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         // expression
         // token = tokens.remove();
         compileExpression();
         // ;
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
 
         write("</letStatement>");
     }
@@ -448,21 +485,21 @@ public class CompilationEngine
         // while
         String token = tokens.remove();
         write("<whileStatement>");
-        write("<keyword>" + token + "</keyword>");
+        writeTerminal(token);
         // (
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         compileExpression();
         // )
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         // {
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         compileStatements();
         // }
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         write("</whileStatement>");
     }
 
@@ -472,7 +509,7 @@ public class CompilationEngine
         // return
         String token = tokens.remove();
         write("<returnStatement>");
-        write("<keyword>" + token + "</keyword>");
+        writeTerminal(token);
         //; or exp
         token = tokens.element();
         if (!";".equals(token))
@@ -481,7 +518,7 @@ public class CompilationEngine
         }
         // ;
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         write("</returnStatement>");
     }
 
@@ -491,38 +528,39 @@ public class CompilationEngine
         // if
         String token = tokens.remove();
         write("<ifStatement>");
-        write("<keyword>" + token + "</keyword>");
+        writeTerminal(token);
         // (
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         compileExpression();
         // )
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         // {
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         compileStatements();
         // }
         token = tokens.remove();
-        write("<symbol>" + token + "</symbol>");
+        writeTerminal(token);
         //s是否是else
         token = tokens.element();
         if (JackTokenizer.ELSE.equals(token))
         {
             // else
             token = tokens.remove();
-            write("<keyword>" + token + "</keyword>");
+            writeTerminal(token);
             // {
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             compileStatements();
             // }
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
         }
         write("</ifStatement>");
     }
+
 
     public void compileExpression() throws IOException
     {
@@ -535,13 +573,15 @@ public class CompilationEngine
         List<String> op = Arrays.asList("+", "-", "*", "/", "&", "|", "<", ">", "=");
         while (op.contains(token))
         {
+            // op
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             compileTerm();
             token = tokens.element();
         }
         write("</expression>");
     }
+
 
     public void compileTerm() throws IOException
     {
@@ -553,32 +593,33 @@ public class CompilationEngine
         write("<term>");
         if (JackTokenizer.isIntegerConstants(token))
         {
-            write("<integerConstant>" + token + "</integerConstant>");
+            writeTerminal(token);
         }
         else if (keywordConstant.contains(token))
         {
-            write("<keyword>" + token + "</keyword>");
+            writeTerminal(token);
         }
         else if (JackTokenizer.isIdentifier(token) && !"(".equals(nextToken) && !".".equals(nextToken))
         {
-            write("<identifier>" + token + "</identifier>");
-            if("[".equals(nextToken))
+            //a + b
+            writeTerminal(token);
+            if ("[".equals(nextToken)) // a[1]
             {
                 token = tokens.remove();
-                write("<symbol>" + token + "</symbol>");
+                writeTerminal(token);
                 compileExpression();
                 // ]
                 token = tokens.remove();
-                write("<symbol>" + token + "</symbol>");
+                writeTerminal(token);
             }
         }
-        else if("(".equals(token))
+        else if ("(".equals(token))
         {
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             compileExpression();
             // )
             token = tokens.remove();
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
         }
         else if ("(".equals(nextToken) || ".".equals(nextToken))
         {
@@ -588,18 +629,19 @@ public class CompilationEngine
             compileSubroutineCall();
 //            write("</subroutineCall>");
         }
-        else if("-".equals(token) || "~".equals(token))
+        else if ("-".equals(token) || "~".equals(token))
         {
-            write("<symbol>" + token + "</symbol>");
+            writeTerminal(token);
             compileTerm();
         }
         else
         {
             // String Constant
-            write("<stringConstant>" + token + "</stringConstant>");
+            writeTerminal(token);
         }
         write("</term>");
     }
+
 
     public void compileExpressionList() throws IOException
     {
@@ -617,7 +659,7 @@ public class CompilationEngine
             {
                 //,
                 token = tokens.remove();
-                write("<symbol>" + token + "</symbol>");
+                writeTerminal(token);
 //                token = tokens.remove();
                 compileExpression();
                 token = tokens.element();
