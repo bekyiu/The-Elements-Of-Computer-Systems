@@ -1,3 +1,4 @@
+
 package bekyiu;
 
 import java.io.BufferedWriter;
@@ -571,14 +572,6 @@ public class CompilationEngine
                 write("<symbol>" + token + "</symbol>");
             }
         }
-        else if ("(".equals(nextToken) || ".".equals(nextToken))
-        {
-            // 此时队首的token是一个funName
-            tokens.addFirst(token);
-//            write("<subroutineCall>");
-            compileSubroutineCall();
-//            write("</subroutineCall>");
-        }
         else if("(".equals(token))
         {
             write("<symbol>" + token + "</symbol>");
@@ -586,6 +579,14 @@ public class CompilationEngine
             // )
             token = tokens.remove();
             write("<symbol>" + token + "</symbol>");
+        }
+        else if ("(".equals(nextToken) || ".".equals(nextToken))
+        {
+            // 此时队首的token是一个funName
+            tokens.addFirst(token);
+//            write("<subroutineCall>");
+            compileSubroutineCall();
+//            write("</subroutineCall>");
         }
         else if("-".equals(token) || "~".equals(token))
         {
